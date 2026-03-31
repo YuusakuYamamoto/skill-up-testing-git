@@ -1,0 +1,16 @@
+{
+  "name": "skill-up-testing-git",
+  "private": true,
+  "scripts": {
+    "test": "pnpm -r test",
+    "test:backend": "pnpm --filter backend test",
+    "test:frontend": "pnpm --filter frontend test",
+    "test:e2e": "pnpm --filter e2e test",
+    "coverage": "pnpm -r coverage",
+    "dev:backend": "pnpm --filter backend dev",
+    "dev:frontend": "pnpm --filter frontend dev"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

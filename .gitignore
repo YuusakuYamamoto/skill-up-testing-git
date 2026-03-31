@@ -1,0 +1,17 @@
+node_modules/
+dist/
+coverage/
+.env
+*.local
+
+# Playwright
+test-results/
+playwright-report/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
