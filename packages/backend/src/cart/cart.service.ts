@@ -84,6 +84,15 @@ export class CartService {
   }
 
   /**
+   * 税込合計を計算する
+   * @param taxRate 税率（例: 0.1 = 10%）
+   */
+  getTotalWithTax(taxRate: number): number {
+    const total = this.getTotal();
+    return Math.round(total * (1 + taxRate));
+  }
+
+  /**
    * カートを空にする
    */
   clear(): void {
