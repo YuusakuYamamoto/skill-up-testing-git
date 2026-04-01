@@ -84,6 +84,15 @@ export class CartService {
   }
 
   /**
+   * 名前でアイテムを検索する（部分一致）
+   */
+  findItemsByName(keyword: string): CartItem[] {
+    return this.items.filter((item) =>
+      item.name.toLowerCase().includes(keyword.toLowerCase())
+    );
+  }
+
+  /**
    * 税込合計を計算する
    * @param taxRate 税率（例: 0.1 = 10%）
    */
