@@ -184,6 +184,38 @@ describe("CartService", () => {
     });
   });
 
+  // ─── getTotalWithTax ─────────────────────────
+
+  describe("getTotalWithTax", () => {
+    it("税込合計を計算する（税率10%）", () => {
+      service.addItem(createItem({ price: 1000, quantity: 1 }));
+      expect(service.getTotalWithTax(0.1)).toBe(1100);
+    });
+  });
+
+  // ─── findItemsByName ────────────────────────
+
+  describe("findItemsByName", () => {
+    it("名前の部分一致で検索できる", () => {
+      service.addItem(createItem({ id: "1", name: "りんご" }));
+      service.addItem(createItem({ id: "2", name: "みかん" }));
+
+      const result = service.findItemsByName("りんご");
+      expect(result).toHaveLength(1);
+      expect(result[0].name).toBe("りんご");
+    });
+  });
+
+  // ─── getItemCount ──────────────────────────
+
+  describe("getItemCount", () => {
+    it("アイテム種類数を返す", () => {
+      service.addItem(createItem({ id: "1" }));
+      service.addItem(createItem({ id: "2" }));
+      expect(service.getItemCount()).toBe(2);
+    });
+  });
+
   // ─── clear ──────────────────────────────────
 
   describe("clear", () => {
