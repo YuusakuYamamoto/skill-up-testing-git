@@ -84,6 +84,13 @@ export class CartService {
   }
 
   /**
+   * カート内のアイテム種類数を返す
+   */
+  getItemCount(): number {
+    return this.items.length;
+  }
+
+  /**
    * 名前でアイテムを検索する（部分一致）
    */
   findItemsByName(keyword: string): CartItem[] {
