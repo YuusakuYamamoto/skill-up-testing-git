@@ -8,9 +8,15 @@ export default defineConfig({
     include: ["**/*.spec.ts", "**/*.test.ts"],
     coverage: {
       provider: "v8",
-      reporter: ["text", "json-summary", "html"],
+      reporter: ["text", "json-summary", "json", "html"],
       include: ["src/**/*.ts"],
-      exclude: ["src/main.ts", "**/*.spec.ts", "**/*.test.ts"],
+      exclude: ["src/main.ts", "**/*.controller.ts", "**/*.spec.ts", "**/*.test.ts"],
+      thresholds: {
+        statements: 80,
+        branches: 80,
+        functions: 80,
+        lines: 80,
+      },
     },
   },
   plugins: [swc.vite()],
