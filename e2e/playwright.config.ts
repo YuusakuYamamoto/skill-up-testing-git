@@ -25,14 +25,19 @@ export default defineConfig({
     {
       command: "pnpm --filter backend dev",
       port: 3000,
-      reuseExistingServer: true,
+      reuseExistingServer: !process.env.CI,
+      timeout: 60_000,
       cwd: "../",
     },
-    {
-      command: "pnpm --filter frontend dev",
-      port: 5173,
-      reuseExistingServer: true,
-      cwd: "../",
-    },
+    ...(!process.env.CI
+      ? [
+          {
+            command: "pnpm --filter frontend dev",
+            port: 5173,
+            reuseExistingServer: true,
+            cwd: "../",
+          },
+        ]
+      : []),
   ],
 });
