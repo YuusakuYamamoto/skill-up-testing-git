@@ -58,10 +58,27 @@ jobs:
           json-final-path: packages/frontend/coverage/coverage-final.json
           vite-config-path: packages/frontend/vitest.config.ts
 
-      # ─── Playwright API テスト ───────────────
+      # ─── Playwright キャッシュ ─────────────────
+      - name: Get Playwright version
+        id: playwright-version
+        run: echo "version=$(cd e2e && npx playwright --version)" >> $GITHUB_OUTPUT
+
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ steps.playwright-version.outputs.version }}
+
       - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: cd e2e && npx playwright install --with-deps chromium
 
+      - name: Install Playwright OS dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: cd e2e && npx playwright install-deps chromium
+
+      # ─── Playwright API テスト ───────────────
       - name: Run Playwright API tests
         run: cd e2e && npx playwright test --project=api
         env:
