@@ -136,6 +136,54 @@ describe("CartService", () => {
     });
   });
 
+  // ─── applyDiscount（TDD）─────────────────────
+
+  describe("applyDiscount（TDD）", () => {
+    it("10%割引を適用できる", () => {
+      service.addItem(createItem({ price: 1000, quantity: 1 }));
+      service.applyDiscount({ type: "percent", value: 10 });
+
+      expect(service.getTotal()).toBe(900);
+    });
+
+    it("500円の固定額割引を適用できる", () => {
+      service.addItem(createItem({ price: 1000, quantity: 1 }));
+      service.applyDiscount({ type: "fixed", value: 500 });
+
+      expect(service.getTotal()).toBe(500);
+    });
+
+    it("最低購入額を満たさない場合、割引が適用されない", () => {
+      service.addItem(createItem({ price: 500, quantity: 1 }));
+      service.applyDiscount({ type: "percent", value: 10, minTotal: 1000 });
+
+      expect(service.getTotal()).toBe(500); // 割引なし
+    });
+
+    it("最低購入額を満たす場合、割引が適用される", () => {
+      service.addItem(createItem({ price: 1000, quantity: 2 }));
+      service.applyDiscount({ type: "percent", value: 10, minTotal: 1000 });
+
+      expect(service.getTotal()).toBe(1800); // 2000 - 10%
+    });
+
+    it("固定額割引で合計が0未満にならない", () => {
+      service.addItem(createItem({ price: 300, quantity: 1 }));
+      service.applyDiscount({ type: "fixed", value: 500 });
+
+      expect(service.getTotal()).toBe(0); // -200 にはならない
+    });
+
+    it("clear() で割引もリセットされる", () => {
+      service.addItem(createItem({ price: 1000, quantity: 1 }));
+      service.applyDiscount({ type: "percent", value: 10 });
+      service.clear();
+
+      service.addItem(createItem({ price: 1000, quantity: 1 }));
+      expect(service.getTotal()).toBe(1000); // 割引なし
+    });
+  });
+
   // ─── clear ──────────────────────────────────
 
   describe("clear", () => {

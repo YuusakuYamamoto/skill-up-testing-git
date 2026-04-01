@@ -1,9 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { CartItem } from "./cart.types";
+import { CartItem, Discount } from "./cart.types";
 
 @Injectable()
 export class CartService {
   private items: CartItem[] = [];
+  private discount: Discount | null = null;
 
   /**
    * カートの全アイテムを取得
@@ -54,11 +55,32 @@ export class CartService {
     item.quantity = quantity;
   }
 
+  applyDiscount(discount: Discount): void {
+    this.discount = discount;
+  }
+
   /**
    * カートの合計金額を計算
    */
   getTotal(): number {
-    return this.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const subtotal = this.items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+
+    if (this.discount) {
+      if (this.discount.minTotal && subtotal < this.discount.minTotal) {
+        return subtotal;
+      }
+      if (this.discount.type === "percent") {
+        return subtotal * (1 - this.discount.value / 100);
+      }
+      if (this.discount.type === "fixed") {
+        return Math.max(0, subtotal - this.discount.value);
+      }
+    }
+
+    return subtotal;
   }
 
   /**
@@ -66,5 +88,6 @@ export class CartService {
    */
   clear(): void {
     this.items = [];
+    this.discount = null;
   }
 }
