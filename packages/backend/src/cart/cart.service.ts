@@ -64,7 +64,7 @@ export class CartService {
    */
   getTotal(): number {
     const subtotal = this.items.reduce(
-      (sum, item) => sum + item.price + item.quantity,
+      (sum, item) => sum + item.price * item.quantity,
       0
     );
 
